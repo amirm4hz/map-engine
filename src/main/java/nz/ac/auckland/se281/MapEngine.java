@@ -26,7 +26,7 @@ public class MapEngine {
 
     for (String countryInfo : countries) {
       String[] info = countryInfo.split(",");
-      String countryName = Utils.capitalizeFirstLetterOfEachWord(info[0].toLowerCase());
+      String countryName = info[0];
       String continent = info[1];
       double taxFees = Double.parseDouble(info[2]);
       Country country = new Country(countryName, continent, taxFees);
@@ -44,7 +44,7 @@ public class MapEngine {
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
     MessageCli.INSERT_COUNTRY.printMessage();
-    String country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine().toLowerCase());
+    String country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
 
     if (countriesMap.containsKey(country)) {
       Country countryInfo = countriesMap.get(country);
