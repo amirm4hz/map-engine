@@ -49,7 +49,7 @@ public class MapEngine {
     while (!validCountry) {
       try {
         MessageCli.INSERT_COUNTRY.printMessage();
-        country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
+        country = countryAsker();
 
         if (!countriesMap.containsKey(country)) {
           throw new CountryNotFoundException(MessageCli.INVALID_COUNTRY.getMessage(country));
@@ -63,6 +63,12 @@ public class MapEngine {
     Country countryInfo = countriesMap.get(country);
     MessageCli.COUNTRY_INFO.printMessage(
         countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
+  }
+
+  public String countryAsker() {
+    String country = "";
+    country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
+    return country;
   }
 
   /** this method is invoked when the user run the command route. */
