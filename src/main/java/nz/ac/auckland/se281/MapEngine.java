@@ -43,6 +43,13 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
+    String country = askForValidCountry();
+    Country countryInfo = countriesMap.get(country);
+    MessageCli.COUNTRY_INFO.printMessage(
+        countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
+  }
+
+  public String askForValidCountry() {
     String country = "";
     boolean validCountry = false;
 
@@ -60,9 +67,8 @@ public class MapEngine {
         System.out.println(e.getMessage());
       }
     }
-    Country countryInfo = countriesMap.get(country);
-    MessageCli.COUNTRY_INFO.printMessage(
-        countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
+
+    return country;
   }
 
   public String countryAsker() {
