@@ -78,5 +78,17 @@ public class MapEngine {
   }
 
   /** this method is invoked when the user run the command route. */
-  public void showRoute() {}
+  public void showRoute() {
+    MessageCli.INSERT_SOURCE.printMessage();
+    String countryOne = askForValidCountry();
+    Country countryOneInfo = countriesMap.get(countryOne);
+    MessageCli.INSERT_DESTINATION.printMessage();
+    String countryTwo = askForValidCountry();
+    Country countryTwoInfo = countriesMap.get(countryTwo);
+
+    if (countryOne.equals(countryTwo)) {
+      MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
+      return;
+    }
+  }
 }
