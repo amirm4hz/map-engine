@@ -1,9 +1,8 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +25,15 @@ public class MapEngine {
     List<String> countries = Utils.readCountries();
     List<String> adjacencies = Utils.readAdjacencies();
 
-    Map<String, List<String>> graph = new HashMap<>(); // Declare the graph variable
+    Map<String, List<String>> graph = new LinkedHashMap<>(); // Declare the graph variable
 
-    countriesMap = new HashMap<>();
+    countriesMap = new LinkedHashMap<>();
 
     for (String countryInfo : countries) {
       String[] info = countryInfo.split(",");
       String countryName = info[0];
       String continent = info[1];
-      double taxFees = Double.parseDouble(info[2]);
+      int taxFees = Integer.parseInt(info[2]); // Convert the string value to an integer
       Country country = new Country(countryName, continent, taxFees);
       countriesMap.put(countryName, country);
       graph.put(countryName, new ArrayList<>());
@@ -42,8 +41,11 @@ public class MapEngine {
 
     for (String adjacency : adjacencies) {
       String[] adjacencyCountries = adjacency.split(",");
-      graph.get(adjacencyCountries[0]).add(adjacencyCountries[1]);
-      graph.get(adjacencyCountries[1]).add(adjacencyCountries[0]);
+      String country = adjacencyCountries[0];
+      for (int i = 1; i < adjacencyCountries.length; i++) {
+        graph.get(country).add(adjacencyCountries[i]);
+        graph.get(adjacencyCountries[i]).add(country);
+      }
     }
 
     // Link the adjacent countries to each Country object
@@ -122,8 +124,8 @@ public class MapEngine {
   }
 
   private List<String> calculateRoute(Country source, Country destination) {
-    Map<Country, Country> predecessorMap = new HashMap<>();
     Queue<Country> queue = new LinkedList<>();
+    Map<Country, Country> predecessors = new LinkedHashMap<>();
     Set<Country> visited = new HashSet<>();
 
     queue.add(source);
@@ -131,25 +133,29 @@ public class MapEngine {
 
     while (!queue.isEmpty()) {
       Country current = queue.poll();
-
       if (current.equals(destination)) {
         break;
       }
 
-      for (Country neighbour : current.adjacentCountries) {
-        if (!visited.contains(neighbour)) {
-          queue.add(neighbour);
-          visited.add(neighbour);
-          predecessorMap.put(neighbour, current);
+      List<Country> neighbors = new ArrayList<>(current.getAdjacentCountries());
+      for (Country neighbor : neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          predecessors.put(neighbor, current);
+          queue.add(neighbor);
         }
       }
     }
-    List<String> route = new ArrayList<>();
-    for (Country country = destination; country != null; country = predecessorMap.get(country)) {
-      route.add(country.name);
+
+    List<String> path = new LinkedList<>();
+    Country step = destination;
+    if (predecessors.containsKey(step) || step.equals(source)) {
+      while (step != null) {
+        path.add(0, step.name);
+        step = predecessors.get(step);
+      }
     }
-    Collections.reverse(route);
-    return route;
+    return path;
   }
 
   public int calculateTaxes(List<String> route) {
