@@ -44,15 +44,25 @@ public class MapEngine {
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
     String country = "";
+    boolean validCountry = false;
 
-    MessageCli.INSERT_COUNTRY.printMessage();
-    country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine().toLowerCase());
+    while (!validCountry) {
+      try {
+        MessageCli.INSERT_COUNTRY.printMessage();
+        country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
 
-    if (countriesMap.containsKey(country)) {
-      Country countryInfo = countriesMap.get(country);
-      MessageCli.COUNTRY_INFO.printMessage(
-          countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
+        if (!countriesMap.containsKey(country)) {
+          throw new CountryNotFoundException(MessageCli.INVALID_COUNTRY.getMessage(country));
+        }
+
+        validCountry = true;
+      } catch (CountryNotFoundException e) {
+        System.out.println(e.getMessage());
+      }
     }
+    Country countryInfo = countriesMap.get(country);
+    MessageCli.COUNTRY_INFO.printMessage(
+        countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
   }
 
   /** this method is invoked when the user run the command route. */
