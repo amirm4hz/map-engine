@@ -43,8 +43,10 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
+    String country = "";
+
     MessageCli.INSERT_COUNTRY.printMessage();
-    String country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
+    country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine().toLowerCase());
 
     if (countriesMap.containsKey(country)) {
       Country countryInfo = countriesMap.get(country);
