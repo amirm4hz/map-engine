@@ -5,10 +5,10 @@ import java.util.List;
 
 /** Represents a country with a name, continent, tax fees, and adjacent countries. */
 public class Country {
-  String name;
-  String continent;
-  int taxFees;
-  List<Country> adjacentCountries;
+  private String name;
+  private String continent;
+  private int taxFees;
+  private List<Country> adjacentCountries;
 
   /**
    * Constructs a new Country with the given name, continent, and tax fees.
@@ -22,6 +22,18 @@ public class Country {
     this.continent = continent;
     this.taxFees = taxFees;
     this.adjacentCountries = new ArrayList<>();
+  }
+
+  public String getContinent() {
+    return continent;
+  }
+
+  public int getTaxFees() {
+    return taxFees;
+  }
+
+  public String getName() {
+    return name;
   }
 
   /**
@@ -57,16 +69,30 @@ public class Country {
   @Override
   public boolean equals(Object obj) {
     // Check if the object is the same as this object
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     Country other = (Country) obj;
     if (name == null) {
-      if (other.name != null) return false;
-    } else if (!name.equals(other.name)) return false;
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
     if (continent == null) {
-      if (other.continent != null) return false;
-    } else if (!continent.equals(other.continent)) return false;
+      if (other.continent != null) {
+        return false;
+      }
+    } else if (!continent.equals(other.continent)) {
+      return false;
+    }
     return true;
   }
 }

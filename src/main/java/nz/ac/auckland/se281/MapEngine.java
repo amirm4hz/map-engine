@@ -75,7 +75,9 @@ public class MapEngine {
     String country = askForValidCountry(MessageCli.INSERT_COUNTRY.getMessage());
     Country countryInfo = countriesMap.get(country);
     MessageCli.COUNTRY_INFO.printMessage(
-        countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
+        countryInfo.getName(),
+        countryInfo.getContinent(),
+        String.valueOf(countryInfo.getTaxFees()));
   }
 
   /**
@@ -92,7 +94,7 @@ public class MapEngine {
     while (!validCountry) {
       try {
         System.out.println(customMessage);
-        country = countryAsker();
+        country = askForCountryName();
 
         // Check if the country is valid
         if (!countriesMap.containsKey(country)) {
@@ -113,10 +115,9 @@ public class MapEngine {
    *
    * @return the name of the country
    */
-  public String countryAsker() {
+  public String askForCountryName() {
     // Capitalize the first letter of each word in the country name
-    String country = "";
-    country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
+    String country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
     return country;
   }
 
@@ -140,7 +141,7 @@ public class MapEngine {
     List<String> route = calculateRoute(sourceInfo, destinationInfo);
     List<String> continents =
         route.stream()
-            .map(country -> countriesMap.get(country).continent)
+            .map(country -> countriesMap.get(country).getContinent())
             .distinct()
             .collect(Collectors.toList());
     int totalTaxes = calculateTaxes(route);
@@ -191,7 +192,7 @@ public class MapEngine {
     Country step = destination;
     if (predecessors.containsKey(step) || step.equals(source)) {
       while (step != null) {
-        path.add(0, step.name);
+        path.add(0, step.getName());
         step = predecessors.get(step);
       }
     }
@@ -210,7 +211,7 @@ public class MapEngine {
     for (int i = 1; i < route.size(); i++) { // Start from 1 to skip the starting country
       String countryName = route.get(i);
       Country country = countriesMap.get(countryName);
-      totalTaxes += country.taxFees; // Add the tax fees of the country
+      totalTaxes += country.getTaxFees(); // Add the tax fees of the country
     }
     return totalTaxes;
   }
