@@ -2,7 +2,6 @@ package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Country {
   String name;
@@ -22,19 +21,26 @@ public class Country {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    Country country = (Country) obj;
-    return Objects.equals(name, country.name);
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((continent == null) ? 0 : continent.hashCode());
+    return result;
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(name);
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    Country other = (Country) obj;
+    if (name == null) {
+      if (other.name != null) return false;
+    } else if (!name.equals(other.name)) return false;
+    if (continent == null) {
+      if (other.continent != null) return false;
+    } else if (!continent.equals(other.continent)) return false;
+    return true;
   }
 }
