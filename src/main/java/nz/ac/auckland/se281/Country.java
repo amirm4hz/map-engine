@@ -24,14 +24,29 @@ public class Country {
     this.adjacentCountries = new ArrayList<>();
   }
 
+  /**
+   * Returns the continent of the country.
+   *
+   * @return the continent of the country
+   */
   public String getContinent() {
     return continent;
   }
 
+  /**
+   * Returns the tax fees of the country.
+   *
+   * @return the tax fees of the country
+   */
   public int getTaxFees() {
     return taxFees;
   }
 
+  /**
+   * Returns the name of the country.
+   *
+   * @return the name of the country
+   */
   public String getName() {
     return name;
   }
