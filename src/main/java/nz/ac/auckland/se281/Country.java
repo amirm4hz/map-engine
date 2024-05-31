@@ -40,6 +40,7 @@ public class Country {
    */
   @Override
   public int hashCode() {
+    // The hash code value is calculated based on the name and continent of the country
     final int prime = 31;
     int result = 1;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -55,6 +56,7 @@ public class Country {
    */
   @Override
   public boolean equals(Object obj) {
+    // Check if the object is the same as this object
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
