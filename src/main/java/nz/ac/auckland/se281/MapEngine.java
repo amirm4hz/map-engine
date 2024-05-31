@@ -44,11 +44,9 @@ public class MapEngine {
       String country = adjacencyCountries[0];
       for (int i = 1; i < adjacencyCountries.length; i++) {
         graph.get(country).add(adjacencyCountries[i]);
-        graph.get(adjacencyCountries[i]).add(country);
       }
     }
 
-    // Link the adjacent countries to each Country object
     for (Map.Entry<String, List<String>> entry : graph.entrySet()) {
       Country country = countriesMap.get(entry.getKey());
       for (String adjacentCountryName : entry.getValue()) {
@@ -137,7 +135,7 @@ public class MapEngine {
         break;
       }
 
-      List<Country> neighbors = new ArrayList<>(current.getAdjacentCountries());
+      List<Country> neighbors = current.getAdjacentCountries();
       for (Country neighbor : neighbors) {
         if (!visited.contains(neighbor)) {
           visited.add(neighbor);
