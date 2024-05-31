@@ -10,17 +10,24 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** This class is the main entry point. */
+/**
+ * This class is the main entry point for the map engine. It loads the map data and provides methods
+ * to interact with it.
+ */
 public class MapEngine {
 
   private Map<String, Country> countriesMap;
 
+  /** Constructs a new MapEngine and loads the map data. */
   public MapEngine() {
     // add other code here if you want
     loadMap(); // keep this mehtod invocation
   }
 
-  /** invoked one time only when constracting the MapEngine class. */
+  /**
+   * Loads the map data from the Utils class. This method is invoked one time only when constructing
+   * the MapEngine class.
+   */
   private void loadMap() {
     List<String> countries = Utils.readCountries();
     List<String> adjacencies = Utils.readAdjacencies();
@@ -58,7 +65,10 @@ public class MapEngine {
     }
   }
 
-  /** this method is invoked when the user run the command info-country. */
+  /**
+   * Displays information about a country. This method is invoked when the user runs the command
+   * info-country.
+   */
   public void showInfoCountry() {
     String country = askForValidCountry(MessageCli.INSERT_COUNTRY.getMessage());
     Country countryInfo = countriesMap.get(country);
@@ -66,6 +76,12 @@ public class MapEngine {
         countryInfo.name, countryInfo.continent, String.valueOf(countryInfo.taxFees));
   }
 
+  /**
+   * Asks the user for a valid country name.
+   *
+   * @param customMessage the message to display to the user
+   * @return the name of the valid country
+   */
   public String askForValidCountry(String customMessage) {
     String country = "";
     boolean validCountry = false;
@@ -88,13 +104,21 @@ public class MapEngine {
     return country;
   }
 
+  /**
+   * Asks the user for a country name.
+   *
+   * @return the name of the country
+   */
   public String countryAsker() {
     String country = "";
     country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
     return country;
   }
 
-  /** this method is invoked when the user run the command route. */
+  /**
+   * Displays the route between two countries. This method is invoked when the user runs the command
+   * route.
+   */
   public void showRoute() {
     String source = askForValidCountry(MessageCli.INSERT_SOURCE.getMessage());
     Country sourceInfo = countriesMap.get(source);
@@ -121,6 +145,13 @@ public class MapEngine {
     MessageCli.TAX_INFO.printMessage(Integer.toString(totalTaxes));
   }
 
+  /**
+   * Calculates the route between two countries.
+   *
+   * @param source the source country
+   * @param destination the destination country
+   * @return the list of country names in the route
+   */
   private List<String> calculateRoute(Country source, Country destination) {
     Queue<Country> queue = new LinkedList<>();
     Map<Country, Country> predecessors = new LinkedHashMap<>();
@@ -156,6 +187,12 @@ public class MapEngine {
     return path;
   }
 
+  /**
+   * Calculates the total tax fees for a route.
+   *
+   * @param route the list of country names in the route
+   * @return the total tax fees
+   */
   public int calculateTaxes(List<String> route) {
     // Sum up the tax fees for each country in the route, except for the starting country.
     int totalTaxes = 0;
