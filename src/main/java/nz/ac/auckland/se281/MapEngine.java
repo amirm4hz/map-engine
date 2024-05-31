@@ -35,7 +35,7 @@ public class MapEngine {
     Map<String, List<String>> graph = new LinkedHashMap<>(); // Declare the graph variable
 
     countriesMap = new LinkedHashMap<>();
-
+    // Create a map to store the country name and the country object
     for (String countryInfo : countries) {
       String[] info = countryInfo.split(",");
       String countryName = info[0];
@@ -46,6 +46,7 @@ public class MapEngine {
       graph.put(countryName, new ArrayList<>());
     }
 
+    // Create the graph by adding the adjacent countries to each country
     for (String adjacency : adjacencies) {
       String[] adjacencyCountries = adjacency.split(",");
       String country = adjacencyCountries[0];
@@ -54,6 +55,7 @@ public class MapEngine {
       }
     }
 
+    // Add the adjacent countries to each country object
     for (Map.Entry<String, List<String>> entry : graph.entrySet()) {
       Country country = countriesMap.get(entry.getKey());
       for (String adjacentCountryName : entry.getValue()) {
@@ -86,11 +88,13 @@ public class MapEngine {
     String country = "";
     boolean validCountry = false;
 
+    // Keep asking the user for a country name until a valid country is entered
     while (!validCountry) {
       try {
         System.out.println(customMessage);
         country = countryAsker();
 
+        // Check if the country is valid
         if (!countriesMap.containsKey(country)) {
           throw new CountryNotFoundException(MessageCli.INVALID_COUNTRY.getMessage(country));
         }
@@ -110,6 +114,7 @@ public class MapEngine {
    * @return the name of the country
    */
   public String countryAsker() {
+    // Capitalize the first letter of each word in the country name
     String country = "";
     country = Utils.capitalizeFirstLetterOfEachWord(Utils.scanner.nextLine());
     return country;
@@ -120,6 +125,7 @@ public class MapEngine {
    * route.
    */
   public void showRoute() {
+    // Ask the user for the source and destination countries
     String source = askForValidCountry(MessageCli.INSERT_SOURCE.getMessage());
     Country sourceInfo = countriesMap.get(source);
     String destination = askForValidCountry(MessageCli.INSERT_DESTINATION.getMessage());
@@ -130,6 +136,7 @@ public class MapEngine {
       return;
     }
 
+    // Calculate the route, continents, and total taxes
     List<String> route = calculateRoute(sourceInfo, destinationInfo);
     List<String> continents =
         route.stream()
@@ -138,6 +145,7 @@ public class MapEngine {
             .collect(Collectors.toList());
     int totalTaxes = calculateTaxes(route);
 
+    // Display the route information
     String routeStr = "[" + String.join(", ", route) + "]";
     MessageCli.ROUTE_INFO.printMessage(routeStr);
     String continentsStr = "[" + String.join(", ", continents) + "]";
@@ -157,6 +165,7 @@ public class MapEngine {
     Map<Country, Country> predecessors = new LinkedHashMap<>();
     Set<Country> visited = new HashSet<>();
 
+    // Perform a breadth-first search to find the route between the source and destination countries
     queue.add(source);
     visited.add(source);
 
@@ -166,6 +175,7 @@ public class MapEngine {
         break;
       }
 
+      // Add the adjacent countries to the queue
       List<Country> neighbors = current.getAdjacentCountries();
       for (Country neighbor : neighbors) {
         if (!visited.contains(neighbor)) {
@@ -176,6 +186,7 @@ public class MapEngine {
       }
     }
 
+    // Construct the route by backtracking from the destination to the source
     List<String> path = new LinkedList<>();
     Country step = destination;
     if (predecessors.containsKey(step) || step.equals(source)) {
@@ -199,7 +210,7 @@ public class MapEngine {
     for (int i = 1; i < route.size(); i++) { // Start from 1 to skip the starting country
       String countryName = route.get(i);
       Country country = countriesMap.get(countryName);
-      totalTaxes += country.taxFees;
+      totalTaxes += country.taxFees; // Add the tax fees of the country
     }
     return totalTaxes;
   }
